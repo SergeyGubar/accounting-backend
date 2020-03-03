@@ -1,5 +1,5 @@
 export class Config implements Readonly<Config> {
-  env: String
-  commit: String
-  branch: String
+  env: string;
+  commit: string;
+  branch: string;
 }

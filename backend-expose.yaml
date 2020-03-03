@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: accounting-service
+  namespace: default
+spec:
+  ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 80
+  selector:
+    app: accounting-backend
+  type: NodePort
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: accounting-ingress
+  annotations:
+    kubernetes.io/ingress.global-static-ip-name: "accounting-ip"
+spec:
+  backend:
+    serviceName: accounting-service
+    servicePort: 8080

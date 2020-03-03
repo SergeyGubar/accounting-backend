@@ -1,0 +1,20 @@
+#apiVersion: apps/v1
+#kind: Deployment
+#metadata:
+#  name: accounting-typescript-deployment
+#spec:
+#  selector:
+#    matchLabels:
+#      app: accounting-typescript
+#  template:
+#    metadata:
+#      labels:
+#        app: accounting-typescript
+#    spec:
+#      containers:
+#        - name: accounting-typescript
+#          image: gubarsergey/accounting:master
+#          ports:
+#            - containerPort: 3001
+#          imagePullPolicy: Always
+#---

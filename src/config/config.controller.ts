@@ -7,8 +7,8 @@ export class ConfigController {
   getConfig(): Config {
     return {
       env: process.env.NODE_ENV,
-      branch: "master", 
-      commit: "commit"
+      branch: 'master',
+      commit: 'commit',
     };
   }
 }
