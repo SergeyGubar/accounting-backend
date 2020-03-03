@@ -12,8 +12,8 @@ run-local:
 	docker run -it -p 8080:80 $(repo)
 
 push:
-	docker push gubarsergey/accounting:master
+	docker push gubarsergey/accounting-backend
 
 deploy:
 	make image
-	make push
+	docker push gubarsergey/accounting-backend
