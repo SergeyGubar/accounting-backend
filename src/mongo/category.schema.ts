@@ -1,15 +1,13 @@
 import * as mongoose from 'mongoose';
 import { Document, Schema } from 'mongoose';
 
-export const AccountSchema = new mongoose.Schema({
+export const CategorySchema = new mongoose.Schema({
     ownerId: Schema.Types.ObjectId,
     title: String,
-    currentAmount: Number,
   },
 );
 
-export interface Account extends Document {
+export interface Category extends Document {
   ownerId: string;
   title: string;
-  currentAmount: number;
 }

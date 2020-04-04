@@ -14,8 +14,6 @@ export class AccountsService {
       ...createAccountDto,
       ownerId,
     };
-    console.log(data,
-    );
     return this.accountModel.create(data);
   }
 
