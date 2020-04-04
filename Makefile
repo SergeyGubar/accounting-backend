@@ -16,4 +16,7 @@ push:
 
 deploy:
 	make image
-	docker push gubarsergey/accounting-backend
+	docker push gubarsergey/accounting-backend:latest
+	kubectl delete deployment accounting-backend
+	kubectl apply -f server.yaml
+

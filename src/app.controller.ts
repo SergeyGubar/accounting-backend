@@ -3,20 +3,21 @@ import { AppService } from './app.service';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth/auth.service';
 
-@Controller()
+@Controller('auth')
 export class AppController {
   constructor(
     private readonly appService: AppService,
     private readonly authService: AuthService,
-  ) {}
+  ) {
+  }
 
   @Get()
   getHello(): string {
     return this.appService.getHello();
   }
 
-  @Post('auth/login')
-  async login(@Request() req) {
+  @Post('login')
+  async login(@Request() req): Promise<{ access_token: string }> {
     return this.authService.login(req.body);
   }
 

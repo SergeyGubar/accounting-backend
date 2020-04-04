@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 
 export interface User {
-  userId: number;
+  userId: string;
   username: string;
   password: string;
 }
@@ -13,19 +13,24 @@ export class UsersService {
   constructor() {
     this.users = [
       {
-        userId: 1,
+        userId: '12345',
         username: 'john',
         password: 'changeme',
       },
       {
-        userId: 2,
+        userId: '123456',
         username: 'chris',
         password: 'secret',
       },
       {
-        userId: 3,
+        userId: '1123123',
         username: 'maria',
         password: 'guess',
+      },
+      {
+        userId: '512354123',
+        username: 'sergey',
+        password: 'megubar123',
       },
     ];
   }
