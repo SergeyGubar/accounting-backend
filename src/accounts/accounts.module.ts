@@ -8,6 +8,7 @@ import { AccountSchema } from '../mongo/account.schema';
   imports: [MongooseModule.forFeature([{ name: 'Account', schema: AccountSchema }])],
   controllers: [AccountsController],
   providers: [AccountsService],
+  exports: [AccountsService],
 })
 export class AccountsModule {
 }
