@@ -46,7 +46,7 @@ export class AccountsService {
 
   async accountTransaction(id: string, amount: number): Promise<Account> {
     return new Promise((resolve, reject) => {
-      this.accountModel.findByIdAndUpdate(id, { $inc: { currentAmount: amount } }, (err, res) => {
+      this.accountModel.findByIdAndUpdate(id, { $inc: { currentAmount: -amount } }, (err, res) => {
         if (err || res == null) {
           reject(err);
         } else {

@@ -42,4 +42,16 @@ export class CategoriesService {
     });
   }
 
+  async categoryById(id: string): Promise<Category> {
+    return new Promise((resolve, reject) => {
+      this.categoryModel.findById(id, (err, res) => {
+        if (err || res == null) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
+  }
+
 }
