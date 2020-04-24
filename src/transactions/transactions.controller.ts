@@ -3,6 +3,7 @@ import { Transaction } from '../mongo/transaction.schema';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/createTransaction.dto';
 import { AuthGuard } from '@nestjs/passport';
+import { GetTimeRangeReportDto } from './dto/getTimeRangeReport.dto';
 
 export interface TotalSpentDto {
   category: string;
@@ -39,6 +40,12 @@ export class TransactionsController {
   @UseGuards(AuthGuard('jwt'))
   deleteTransaction(@Param('id') id: string): Promise<Transaction | null> {
     return this.transactionsService.delete(id);
+  }
+
+  @Post('report/timeRange')
+  @UseGuards(AuthGuard('jwt'))
+  getTimeRangeReport(@Body() reportDto: GetTimeRangeReportDto): Promise<any> {
+    return this.transactionsService.getTimeRangeReport(new Date(reportDto.startDate), new Date(reportDto.endDate), reportDto.accountId);
   }
 
   @Post('mock/:id')

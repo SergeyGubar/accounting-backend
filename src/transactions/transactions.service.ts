@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { Model, Types } from 'mongoose';
 import { CreateTransactionDto } from './dto/createTransaction.dto';
 import { Transaction, TransactionT } from '../mongo/transaction.schema';
 import { AccountsService } from '../accounts/accounts.service';
@@ -24,6 +24,47 @@ export class TransactionsService {
       category,
     };
     return this.transactionModel.create(record);
+  }
+
+  async getTimeRangeReport(startDate: Date, endDate: Date, accountId: string): Promise<any> {
+    return new Promise((resolve, reject) => {
+      this.transactionModel.aggregate([
+        {
+          $match: {
+            accountId: {
+              $eq: Types.ObjectId(accountId),
+            },
+            createdAt: {
+              $gt: startDate,
+              $lte: endDate,
+            },
+          },
+        },
+        {
+          $group: {
+            _id: {
+              month: { $month: '$createdAt' },
+              day: { $dayOfMonth: '$createdAt' },
+              year: { $year: '$createdAt' },
+              // createdAt: '$createdAt',
+            },
+            totalSpent: { $sum: '$amount' },
+            count: { $sum: 1 },
+          },
+        },
+        // {
+        //   $sort: {
+        //     '_id.createdAt': -1,
+        //   },
+        // },
+      ], (err, res) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(res);
+        }
+      });
+    });
   }
 
   async mockCreate(dtos: CreateTransactionDto[]) {
