@@ -46,17 +46,22 @@ export class TransactionsService {
               month: { $month: '$createdAt' },
               day: { $dayOfMonth: '$createdAt' },
               year: { $year: '$createdAt' },
-              // createdAt: '$createdAt',
+              createdAt: {
+                $dateToString: {
+                  date: '$createdAt',
+                  format: '%Y-%m-%d',
+                },
+              },
             },
             totalSpent: { $sum: '$amount' },
             count: { $sum: 1 },
           },
         },
-        // {
-        //   $sort: {
-        //     '_id.createdAt': -1,
-        //   },
-        // },
+        {
+          $sort: {
+            '_id.createdAt': -1,
+          },
+        },
       ], (err, res) => {
         if (err) {
           reject(err);
