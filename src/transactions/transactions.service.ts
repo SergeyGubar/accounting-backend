@@ -72,6 +72,56 @@ export class TransactionsService {
     });
   }
 
+  async getTotalReport(userId: string): Promise<any[]> {
+    return new Promise(async (resolve, reject) => {
+      const accounts = await this.accountsService.getAll(userId);
+      const reports = [];
+      for (const account of accounts) {
+        await this.transactionModel.aggregate([
+          {
+            $match: {
+              accountId: {
+                $eq: Types.ObjectId(account._id),
+              },
+            },
+          },
+          {
+            $group: {
+              _id: account.id,
+              totalEarned: {
+                $sum: {
+                  $cond: { if: { $gte: ['$amount', 0] }, then: '$amount', else: 0 },
+                },
+              },
+              countEarned: {
+                $sum: {
+                  $cond: { if: { $gte: ['$amount', 0] }, then: 1, else: 0 },
+                },
+              },
+              totalSpent: {
+                $sum: {
+                  $cond: { if: { $lt: ['$amount', 0] }, then: '$amount', else: 0 },
+                },
+              },
+              countSpent: {
+                $sum: {
+                  $cond: { if: { $lt: ['$amount', 0] }, then: 1, else: 0 },
+                },
+              },
+            },
+          },
+        ], (err, res) => {
+          if (err) {
+            reject(err);
+          } else {
+            reports.push(res[0]);
+          }
+        });
+      }
+      resolve(reports);
+    });
+  }
+
   async mockCreate(dtos: CreateTransactionDto[]) {
     for (const createTransactionDto of dtos) {
       await this.accountsService.accountTransaction(createTransactionDto.accountId, createTransactionDto.amount);

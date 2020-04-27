@@ -4,6 +4,7 @@ import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/createTransaction.dto';
 import { AuthGuard } from '@nestjs/passport';
 import { GetTimeRangeReportDto } from './dto/getTimeRangeReport.dto';
+import { TotalReportResultDto } from './dto/totalReportResult.dto';
 
 export interface TotalSpentDto {
   category: string;
@@ -46,6 +47,12 @@ export class TransactionsController {
   @UseGuards(AuthGuard('jwt'))
   getTimeRangeReport(@Body() reportDto: GetTimeRangeReportDto): Promise<any> {
     return this.transactionsService.getTimeRangeReport(new Date(reportDto.startDate), new Date(reportDto.endDate), reportDto.accountId);
+  }
+
+  @Post('report/total')
+  @UseGuards(AuthGuard('jwt'))
+  getTotalReport(@Request() req): Promise<any[]> {
+    return this.transactionsService.getTotalReport(req.user.userId);
   }
 
   @Post('mock/:id')
