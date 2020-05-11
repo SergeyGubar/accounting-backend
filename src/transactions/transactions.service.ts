@@ -87,7 +87,10 @@ export class TransactionsService {
           },
           {
             $group: {
-              _id: account.id,
+              _id: {
+                id: account.id,
+                title: account.title,
+              },
               totalEarned: {
                 $sum: {
                   $cond: { if: { $gte: ['$amount', 0] }, then: '$amount', else: 0 },

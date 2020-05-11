@@ -55,4 +55,19 @@ export class AccountsService {
       });
     });
   }
+
+  changeRemaining(id: string, amount: number): Promise<Account | null> {
+    return new Promise((resolve, reject) => {
+      this.accountModel.findByIdAndUpdate(id,
+        {
+          currentAmount: amount,
+        }, (err, res) => {
+          if (err || !res) {
+            reject(err);
+          } else {
+            resolve(res);
+          }
+        });
+    });
+  }
 }

@@ -3,6 +3,7 @@ import { AccountsService } from './accounts.service';
 import { AuthGuard } from '@nestjs/passport';
 import { Account } from '../mongo/account.schema';
 import { CreateAccountDto } from './dto/createAccount.dto';
+import { ChangeRemainingDto } from './dto/changeRemaining.dto';
 
 @Controller('accounts')
 export class AccountsController {
@@ -25,6 +26,12 @@ export class AccountsController {
   @UseGuards(AuthGuard('jwt'))
   myAccounts(@Request() req): Promise<Account[]> {
     return this.accountsService.getAll(req.user.userId);
+  }
+
+  @Post('remaining')
+  @UseGuards(AuthGuard('jwt'))
+  changeRemaining(@Request() req, @Body() changeRemainingDto: ChangeRemainingDto): Promise<any> {
+    return this.accountsService.changeRemaining(changeRemainingDto.id, changeRemainingDto.amount);
   }
 
 }
