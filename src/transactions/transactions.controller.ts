@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpService, Param, Post, Request, UseGuards } from '@nestjs/common';
 import { Transaction } from '../mongo/transaction.schema';
 import { TransactionsService } from './transactions.service';
 import { CreateTransactionDto } from './dto/createTransaction.dto';
@@ -16,6 +16,7 @@ export interface TotalSpentDto {
 export class TransactionsController {
   constructor(
     private readonly transactionsService: TransactionsService,
+    private readonly httpService: HttpService,
   ) {
   }
 
@@ -51,8 +52,22 @@ export class TransactionsController {
 
   @Post('report/total')
   @UseGuards(AuthGuard('jwt'))
-  getTotalReport(@Request() req): Promise<any[]> {
-    return this.transactionsService.getTotalReport(req.user.userId);
+  async getTotalReport(@Request() req): Promise<any[]> {
+    // tslint:disable-next-line:max-line-length
+    const usdToUah = await this.httpService.get(`https://free.currconv.com/api/v7/convert?q=USD_UAH&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`).toPromise();
+    // tslint:disable-next-line:max-line-length
+    const eurToUah = await this.httpService.get(`https://free.currconv.com/api/v7/convert?q=EUR_UAH&compact=ultra&apiKey=${process.env.CURRENCY_API_KEY}`).toPromise();
+    const result = await this.transactionsService.getTotalReport(req.user.userId);
+    return result.map(a => {
+      if (a == null) {
+        return;
+      }
+      return {
+        ...a,
+        usdCourse: usdToUah.data.USD_UAH,
+        eurCourse: eurToUah.data.EUR_UAH,
+      };
+    });
   }
 
   @Post('mock/:id')

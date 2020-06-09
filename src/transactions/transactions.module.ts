@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { HttpModule, Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { TransactionSchema } from '../mongo/transaction.schema';
 import { TransactionsController } from './transactions.controller';
@@ -7,7 +7,7 @@ import { AccountsModule } from '../accounts/accounts.module';
 import { CategoriesModule } from '../categories/categories.module';
 
 @Module({
-  imports: [MongooseModule.forFeature([{ name: 'Transaction', schema: TransactionSchema }]), AccountsModule, CategoriesModule],
+  imports: [MongooseModule.forFeature([{ name: 'Transaction', schema: TransactionSchema }]), AccountsModule, CategoriesModule, HttpModule],
   controllers: [TransactionsController],
   providers: [TransactionsService],
 })

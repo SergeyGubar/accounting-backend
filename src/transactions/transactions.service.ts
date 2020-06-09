@@ -90,6 +90,7 @@ export class TransactionsService {
               _id: {
                 id: account.id,
                 title: account.title,
+                currency: (account as any)._doc.currency,
               },
               totalEarned: {
                 $sum: {
